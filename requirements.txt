@@ -1,5 +1,8 @@
+# Core dependencies for Python Data Processing and Automation Scripts
+# WARNING: Some libraries below use deprecated APIs. See README.md "Known Issues" section.
+
 pandas
 numpy
-openai
-twitter
-selenium
+openai         # WARNING: Scripts use deprecated API - see README for modern alternatives
+twitter        # WARNING: Deprecated library - consider tweepy for new projects  
+selenium       # WARNING: Scripts use deprecated methods - see README for modern syntax
