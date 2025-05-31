@@ -1,16 +1,22 @@
 __author__ = 'mbp'
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.chrome.service import Service
 from selenium.common.exceptions import NoSuchElementException
+from webdriver_manager.chrome import ChromeDriverManager
 import time
 
 #returns the link of the result found.
 def getlink(search_string):
     result = []
-    browser = webdriver.Chrome('/usr/local/bin/chromedriver')
+    # Use webdriver-manager for automatic ChromeDriver management
+    service = Service(ChromeDriverManager().install())
+    browser = webdriver.Chrome(service=service)
     browser.get('http://www.google.com/ncr')
 
-    elem = browser.find_element_by_name('q')  # Find the search box
+    # Use modern By locators instead of deprecated find_element_by_* methods
+    elem = browser.find_element(By.NAME, 'q')  # Find the search box
     elem.send_keys(search_string + " xls")
     elem.send_keys(Keys.RETURN)
 
@@ -20,7 +26,7 @@ def getlink(search_string):
         # bing x_path = '//*[@id="b_results"]/li[' + str(i+1) +  ']/h2/a'
         x_path = '//*[@id="rso"]/div[2]/div[' + str(i+1) + ']/div/h3/a'
         try:
-            elem = browser.find_element_by_xpath(x_path)
+            elem = browser.find_element(By.XPATH, x_path)
             result.append(elem.get_attribute('href'))
         except NoSuchElementException:
             print('SOMETHING IS wrong')

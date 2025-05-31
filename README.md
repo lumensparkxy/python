@@ -2,7 +2,7 @@
 
 This repository contains a collection of Python scripts and Jupyter notebooks for data processing, automation, and integration with external APIs. The scripts cover tasks such as merging CSV files, adding columns to CSVs, automating Google searches, and posting tweets using OpenAI GPT models.
 
-> **⚠️ Important Note**: Some scripts in this repository use deprecated libraries and APIs. Please see the [Known Issues](#known-issues) section below for important updates and alternatives.
+All scripts have been updated to use modern APIs and current best practices.
 
 ## Contents
 
@@ -17,13 +17,13 @@ This repository contains a collection of Python scripts and Jupyter notebooks fo
   - ⚠️ **Important**: Contains hardcoded landing zone path
 
 - **google_search_using_selenium.py**: Automates Google searches using Selenium WebDriver, extracts top 4 result links per query, and writes them to `SearchLinks.txt`. 
-  - Requires ChromeDriver installation and proper path configuration
+  - Uses automatic ChromeDriver management with webdriver-manager
   - Reads search queries from `xxx.txt` file (one per line)
-  - ⚠️ **Important**: Uses deprecated Selenium methods that may not work with newer versions
+  - Updated to use modern Selenium 4.0+ syntax
 
 - **openai_gpt_tweet_pro_tips.py**: Uses OpenAI's GPT-3.5-turbo to generate Python programming tips and posts them to Twitter automatically.
-  - Requires both Twitter and OpenAI API credentials as environment variables
-  - ⚠️ **Important**: Uses deprecated OpenAI API and Twitter library
+  - Requires both Twitter/X and OpenAI API credentials as environment variables
+  - Updated to use modern OpenAI client API (v1.0+) and tweepy library
 
 ### Jupyter Notebooks
 
@@ -43,28 +43,16 @@ pip install -r requirements.txt
 ### Core Dependencies
 - **pandas** - Data manipulation and analysis
 - **numpy** - Numerical computing
-- **openai** - OpenAI API client (⚠️ See [Known Issues](#known-issues))
-- **twitter** - Twitter API client (⚠️ Deprecated - see alternatives below)
-- **selenium** - Web browser automation (⚠️ Uses deprecated methods)
-
-### Alternative Dependencies (Recommended)
-For new projects, consider these modern alternatives:
-```bash
-# For Twitter/X integration
-pip install tweepy
-
-# For OpenAI (ensure compatibility with latest API)
-pip install openai>=1.0.0
-
-# For Selenium with modern syntax
-pip install selenium>=4.0.0
-```
+- **openai** - OpenAI API client (modern v1.0+ client-based API)
+- **tweepy** - Modern Twitter/X API v2 client
+- **selenium** - Web browser automation (modern v4.0+ with By locators)
+- **webdriver-manager** - Automatic ChromeDriver management
 
 ## Setup & Preconditions
 
 - **Python 3.8+** is recommended for best compatibility.
-- For scripts using Selenium, [ChromeDriver](https://sites.google.com/a/chromium.org/chromedriver/) must be installed and its path set in the script.
-- For Twitter and OpenAI integration, set the following environment variables:
+- For scripts using Selenium, ChromeDriver is automatically managed by webdriver-manager.
+- For Twitter/X and OpenAI integration, set the following environment variables:
   - `TWITTER_CONSUMER_KEY`, `TWITTER_CONSUMER_SECRET`, `TWITTER_ACCESS_TOKEN_KEY`, `TWITTER_ACCESS_TOKEN_SECRET`
   - `OPENAI_API_KEY`
 - **Important**: Scripts contain hardcoded file paths (e.g., `/Users/mbp/Python/appendcolumn`, `/Users/mbp/Python/WIKIPEDIA`). You **must** update these paths to match your environment before running.
@@ -102,13 +90,13 @@ export TWITTER_ACCESS_TOKEN_SECRET="your_access_token_secret"
   ```bash
   python google_search_using_selenium.py
   ```
-  Edit the script for your ChromeDriver path and ensure `xxx.txt` exists with search queries. Run to collect search result links. **Note**: Uses deprecated Selenium methods.
+  Ensure `xxx.txt` exists with search queries. Run to collect search result links. ChromeDriver is automatically managed.
 
 - **openai_gpt_tweet_pro_tips.py**: 
   ```bash
   python openai_gpt_tweet_pro_tips.py
   ```
-  Ensure environment variables are set. Run to post a GPT-generated tip to Twitter. **Note**: Uses deprecated OpenAI API methods and Twitter library.
+  Ensure environment variables are set. Run to post a GPT-generated tip to Twitter/X using modern APIs.
 
 ### Jupyter Notebooks
 
@@ -117,86 +105,30 @@ Open any notebook in Jupyter Lab or Google Colab:
 jupyter lab pandas_001_10_minutes_to_pandas.ipynb
 ```
 
-## Known Issues
-
-### 1. OpenAI API Deprecation (openai_gpt_tweet_pro_tips.py)
-**Issue**: The script uses deprecated `openai.ChatCompletion.create()` method.
-
-**Current code**:
-```python
-response = openai.ChatCompletion.create(model="gpt-3.5-turbo", ...)
-```
-
-**Modern replacement**:
-```python
-from openai import OpenAI
-client = OpenAI()
-response = client.chat.completions.create(model="gpt-3.5-turbo", ...)
-```
-
-### 2. Selenium WebDriver Deprecation (google_search_using_selenium.py)
-**Issue**: Uses deprecated `find_element_by_*()` methods.
-
-**Current code**:
-```python
-elem = browser.find_element_by_name('q')
-elem = browser.find_element_by_xpath(x_path)
-```
-
-**Modern replacement**:
-```python
-from selenium.webdriver.common.by import By
-elem = browser.find_element(By.NAME, 'q')
-elem = browser.find_element(By.XPATH, x_path)
-```
-
-### 3. Twitter API Changes
-**Issue**: The `twitter` library is deprecated and Twitter/X API has significant changes.
-
-**Modern alternatives**:
-- Use [tweepy](https://docs.tweepy.org/) for Twitter/X API v2
-- Update API credentials and endpoints according to current Twitter/X developer documentation
-
-### 4. Hardcoded File Paths
-**Issue**: Scripts contain hardcoded paths that need manual updating.
-
-**Files affected**:
-- `merge_csv_files_from_folder.py`: Lines 10-11
-- `add_column_name_of_file.py`: Line 7
-- `google_search_using_selenium.py`: Line 10 (ChromeDriver path)
-
-**Solution**: Update these paths to match your local environment before running.
-
-### 5. ChromeDriver Management
-**Issue**: Manual ChromeDriver path specification.
-
-**Modern alternative**:
-```python
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
-
-# Automatically manage ChromeDriver
-service = Service(ChromeDriverManager().install())
-driver = webdriver.Chrome(service=service)
-```
-
 ## Troubleshooting
 
 ### Common Installation Issues
-1. **OpenAI version conflicts**: Ensure you're using a compatible version
+1. **OpenAI API**: All scripts use the modern client-based API (v1.0+)
    ```bash
-   pip install openai==0.28.1  # For old API syntax
-   # OR
-   pip install openai>=1.0.0   # For new API syntax (requires code updates)
+   pip install openai>=1.0.0
    ```
 
-2. **Selenium compatibility**: For modern Selenium:
+2. **Twitter/X API**: Uses modern tweepy library
+   ```bash
+   pip install tweepy>=4.0.0
+   ```
+
+3. **Selenium**: Uses modern syntax and automatic driver management
    ```bash
    pip install selenium>=4.0.0 webdriver-manager
    ```
 
-3. **Twitter API access**: Twitter/X now requires approved developer accounts for API access.
+4. **Twitter/X API access**: Twitter/X now requires approved developer accounts for API access.
+
+### Remaining Manual Updates Needed
+- **Hardcoded File Paths**: Scripts still contain hardcoded paths that need manual updating:
+  - `merge_csv_files_from_folder.py`: Lines 10-11
+  - `add_column_name_of_file.py`: Line 7
 
 ## Contact
 

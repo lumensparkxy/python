@@ -1,8 +1,9 @@
 # Core dependencies for Python Data Processing and Automation Scripts
-# WARNING: Some libraries below use deprecated APIs. See README.md "Known Issues" section.
+# Updated to use modern APIs and libraries
 
-pandas
-numpy
-openai         # WARNING: Scripts use deprecated API - see README for modern alternatives
-twitter        # WARNING: Deprecated library - consider tweepy for new projects  
-selenium       # WARNING: Scripts use deprecated methods - see README for modern syntax
+pandas>=1.5.0
+numpy>=1.21.0
+openai>=1.0.0        # Modern client-based API
+tweepy>=4.0.0        # Modern Twitter/X API client
+selenium>=4.0.0      # Modern WebDriver with By locators
+webdriver-manager    # Automatic ChromeDriver management
