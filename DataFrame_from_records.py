@@ -22,6 +22,8 @@ def get_message_dataframe() -> pd.DataFrame:
     df = pd.DataFrame.from_records(data)
     return df
 
+email['no_of_attachments'] = email['metadata'].apply(lambda x: next((d['number_of_attachments'] for d in x if 'number_of_attachments' in d), None))
+
 # Example usage
 if __name__ == "__main__":
     df = get_message_dataframe()
