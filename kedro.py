@@ -23,3 +23,10 @@ runner = SequentialRunner()
 result = runner.run(pipeline=pipeline, catalog=catalog)
 
 print(result["msgs_df"])
+
+
+"""
+proba = model.predict_proba(X)          # shape: (n_samples, 2)
+p1 = proba[:, 1]                        # probability of class 1 (if classes_ = [0,1])
+y_pred = (p1 >= 0.7).astype(int)        # threshold = 0.7 (example)
+"""
